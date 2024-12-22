@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { register, login, logout, refreshUser } from './operations';
+import { createSlice } from "@reduxjs/toolkit";
+import { register, login, logout, refreshUser } from "./operations";
 
 const initialState = {
   user: { name: null, email: null },
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   extraReducers: (builder) => {
     builder

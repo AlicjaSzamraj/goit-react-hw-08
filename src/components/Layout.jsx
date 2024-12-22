@@ -1,16 +1,14 @@
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Header from "./Header";
 
-export const Layout = () => (
+const Layout = () => (
   <div>
-    <header>
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/register">Register</Link> |{" "}
-        <Link to="/login">Login</Link> | <Link to="/contacts">Contacts</Link>
-      </nav>
-    </header>
+    <Header />
     <main>
       <Outlet />
     </main>
   </div>
 );
+
+export default Layout;

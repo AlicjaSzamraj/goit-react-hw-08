@@ -1,74 +1,71 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import styles from "./ContactForm.module.css";
 import { useDispatch } from "react-redux";
 import { addContact } from "../redux/contactsSlice";
-
-const formatPhoneNumber = (number) => {
-  return number.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-};
+import styles from "./ContactForm.module.css";
 
 const validationSchema = yup.object().shape({
-  name: yup
-    .string()
-    .matches(/^[a-zA-Z\s]*$/, "Name can only contain letters and spaces")
-    .required("Required")
-    .min(3, "Too short")
-    .max(50, "Too long"),
-  phone: yup
-    .string()
-    .matches(
-      /^\d{3}-\d{3}-\d{4}$/,
-      "Phone number must be in the format 123-456-7890"
-    )
-    .required("Required"),
+  name: yup.string().required("Name is required"),
+  number: yup.string().required("Number is required"),
 });
 
 const ContactForm = () => {
   const dispatch = useDispatch();
 
-  const handleAddContact = (values) => {
-    const formattedValues = {
-      ...values,
-      phone: formatPhoneNumber(values.phone.replace(/-/g, "")),
-    };
-    dispatch(addContact(formattedValues));
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    console.log("Submitting values:", values);
+    const resultAction = await dispatch(addContact(values));
+    if (addContact.fulfilled.match(resultAction)) {
+      console.log("Contact added successfully:", resultAction.payload);
+    } else {
+      console.log("Contact addition failed:", resultAction.payload);
+      setErrors({ api: resultAction.payload });
+    }
+    setSubmitting(false);
   };
 
   return (
-    <Formik
-      initialValues={{ name: "", phone: "" }}
-      validationSchema={validationSchema}
-      onSubmit={(values, { resetForm }) => {
-        handleAddContact(values);
-        resetForm();
-      }}
-    >
-      <Form className={styles.contactForm}>
-        <label className={styles.label} htmlFor="name">
-          Name
-        </label>
-        <Field className={styles.input} type="text" name="name" />
-        <ErrorMessage
-          name="name"
-          component="div"
-          className={styles.errorMessage}
-        />
+    <div>
+      <h2 className={styles.header}>Add Contact</h2>
+      <Formik
+        initialValues={{ name: "", number: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ errors }) => (
+          <Form className={styles.contactForm}>
+            <label htmlFor="name" className={styles.label}>
+              Name
+            </label>
+            <Field name="name" type="text" className={styles.input} />
+            <ErrorMessage
+              name="name"
+              component="div"
+              className={styles.errorMessage}
+            />
 
-        <label htmlFor="phone">Phone</label>
-        <Field className={styles.input} type="text" name="phone" />
-        <ErrorMessage
-          name="phone"
-          component="div"
-          className={styles.errorMessage}
-        />
+            <label htmlFor="number" className={styles.label}>
+              Number
+            </label>
+            <Field name="number" type="text" className={styles.input} />
+            <ErrorMessage
+              name="number"
+              component="div"
+              className={styles.errorMessage}
+            />
 
-        <button className={styles.button} type="submit">
-          Add Contact
-        </button>
-      </Form>
-    </Formik>
+            {errors.api && (
+              <div className={styles.errorMessage}>{errors.api}</div>
+            )}
+
+            <button type="submit" className={styles.button}>
+              Add Contact
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

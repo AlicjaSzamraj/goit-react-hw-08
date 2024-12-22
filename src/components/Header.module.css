@@ -10,14 +10,19 @@
   align-items: center;
 }
 
-.nav a {
+.link {
   text-decoration: none;
   color: #007bff;
   padding: 0 10px;
 }
 
-.nav a:hover {
+.link:hover {
   text-decoration: underline;
+}
+
+.welcome {
+  margin-right: 20px;
+  font-weight: bold;
 }
 
 .button {

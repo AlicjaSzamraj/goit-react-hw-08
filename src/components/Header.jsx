@@ -1,10 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { logout } from "../redux/auth/operations";
-import styles from "./Header.module.css"; // Importowanie pliku CSS
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/auth/operations"; // Upewnij się, że ścieżka jest poprawna
+import { Link } from "react-router-dom";
+import styles from "./Header.module.css";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const userEmail = useSelector((state) => state.auth.user?.email); // Pobieranie e-maila użytkownika z Redux
 
   const handleLogout = () => {
     dispatch(logout());
@@ -12,21 +14,22 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      {" "}
-      // Używanie stylów CSS
       <nav className={styles.nav}>
-        <a href="/" className={styles.link}>
+        <Link to="/" className={styles.link}>
           Home
-        </a>
-        <a href="/register" className={styles.link}>
+        </Link>
+        <Link to="/register" className={styles.link}>
           Register
-        </a>
-        <a href="/login" className={styles.link}>
+        </Link>
+        <Link to="/login" className={styles.link}>
           Login
-        </a>
-        <a href="/contacts" className={styles.link}>
+        </Link>
+        <Link to="/contacts" className={styles.link}>
           Contacts
-        </a>
+        </Link>
+        {userEmail && (
+          <span className={styles.welcome}>Welcome, {userEmail}</span>
+        )}
         <button onClick={handleLogout} className={styles.button}>
           Logout
         </button>

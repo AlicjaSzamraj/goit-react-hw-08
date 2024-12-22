@@ -1,12 +1,11 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { Layout } from "./components/Layout";
+import Layout from "./components/Layout"; // Importowanie poprawnie wyeksportowanego komponentu Layout
 import { PrivateRoute } from "./components/PrivateRoute";
 import { RestrictedRoute } from "./components/RestrictedRoute";
 import { refreshUser } from "./redux/auth/operations";
 import { selectIsRefreshing } from "./redux/auth/selectors";
-import Header from "./components/Header";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
@@ -25,7 +24,6 @@ const App = () => {
     <b>Refreshing user...</b>
   ) : (
     <Suspense fallback={<div>Loading...</div>}>
-      <Header /> // Używanie komponentu Header
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />

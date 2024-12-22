@@ -1,26 +1,83 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "https://connections-api.goit.global/contacts";
+axios.defaults.baseURL = "https://connections-api.goit.global/";
 
-export const fetchContacts = createAsyncThunk("contacts/fetchAll", async () => {
-  const response = await axios.get(BASE_URL);
-  return response.data;
-});
+const token = {
+  set(token) {
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  },
+  unset() {
+    axios.defaults.headers.common.Authorization = "";
+  },
+};
+
+export const fetchContacts = createAsyncThunk(
+  "contacts/fetchAll",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const persistedToken = state.auth.token;
+
+    if (persistedToken === null) {
+      return thunkAPI.rejectWithValue("Unable to fetch contacts");
+    }
+
+    token.set(persistedToken);
+    try {
+      const response = await axios.get("contacts");
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
 
 export const addContact = createAsyncThunk(
   "contacts/addContact",
-  async (newContact) => {
-    const response = await axios.post(BASE_URL, newContact);
-    return response.data;
+  async (newContact, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const persistedToken = state.auth.token;
+
+    if (persistedToken === null) {
+      return thunkAPI.rejectWithValue("Unable to add contact");
+    }
+
+    token.set(persistedToken);
+    try {
+      const response = await axios.post("contacts", {
+        name: newContact.name,
+        number: newContact.number,
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
   }
 );
 
 export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
-  async (contactId) => {
-    await axios.delete(`${BASE_URL}/${contactId}`);
-    return contactId;
+  async (contactId, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const persistedToken = state.auth.token;
+
+    if (persistedToken === null) {
+      return thunkAPI.rejectWithValue("Unable to delete contact");
+    }
+
+    token.set(persistedToken);
+    try {
+      await axios.delete(`contacts/${contactId}`);
+      return contactId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
   }
 );
 

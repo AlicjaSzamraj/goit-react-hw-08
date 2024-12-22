@@ -33,7 +33,10 @@ const ContactsPage = () => {
       <div className={styles.searchBox}>
         <SearchBox />
       </div>
-      <ContactList contacts={contacts} deleteContact={deleteContact} />
+      <ContactList
+        contacts={contacts}
+        deleteContact={(id) => dispatch(deleteContact(id))}
+      />
     </div>
   );
 };

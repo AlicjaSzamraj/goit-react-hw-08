@@ -1,8 +1,6 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { useDispatch } from "react-redux";
-import { addContact } from "../redux/contactsSlice";
 import styles from "./ContactForm.module.css";
 
 const validationSchema = yup.object().shape({
@@ -10,17 +8,20 @@ const validationSchema = yup.object().shape({
   number: yup.string().required("Number is required"),
 });
 
-const ContactForm = () => {
-  const dispatch = useDispatch();
-
+const ContactForm = ({ onAddContact }) => {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     console.log("Submitting values:", values);
-    const resultAction = await dispatch(addContact(values));
-    if (addContact.fulfilled.match(resultAction)) {
-      console.log("Contact added successfully:", resultAction.payload);
-    } else {
-      console.log("Contact addition failed:", resultAction.payload);
-      setErrors({ api: resultAction.payload });
+    try {
+      const resultAction = await onAddContact(values);
+      if (resultAction.type.endsWith("/fulfilled")) {
+        console.log("Contact added successfully:", resultAction.payload);
+      } else {
+        console.log("Contact addition failed:", resultAction.payload);
+        setErrors({ api: resultAction.payload });
+      }
+    } catch (error) {
+      console.error("Error adding contact:", error);
+      setErrors({ api: error.message });
     }
     setSubmitting(false);
   };
@@ -33,8 +34,8 @@ const ContactForm = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors }) => (
-          <Form className={styles.contactForm}>
+        {({ errors, isSubmitting }) => (
+          <Form className={styles.form}>
             <label htmlFor="name" className={styles.label}>
               Name
             </label>
@@ -59,7 +60,11 @@ const ContactForm = () => {
               <div className={styles.errorMessage}>{errors.api}</div>
             )}
 
-            <button type="submit" className={styles.button}>
+            <button
+              type="submit"
+              className={styles.button}
+              disabled={isSubmitting}
+            >
               Add Contact
             </button>
           </Form>

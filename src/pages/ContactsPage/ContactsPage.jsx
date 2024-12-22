@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import ContactList from "../../components/ContactList";
 import ContactForm from "../../components/ContactForm";
 import SearchBox from "../../components/SearchBox";
-import { fetchContacts, deleteContact } from "../../redux/contactsSlice";
+import {
+  fetchContacts,
+  deleteContact,
+  addContact,
+} from "../../redux/contactsSlice";
 import styles from "./ContactsPage.module.css";
 
 const ContactsPage = () => {
@@ -29,6 +33,12 @@ const ContactsPage = () => {
     });
   };
 
+  const handleAddContact = (contact) => {
+    return dispatch(addContact(contact)).then(() => {
+      dispatch(fetchContacts());
+    });
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -41,7 +51,7 @@ const ContactsPage = () => {
     <div className={styles.container}>
       <h1 className={styles.header}>Your Contacts</h1>
       <div className={styles.form}>
-        <ContactForm />
+        <ContactForm onAddContact={handleAddContact} />
       </div>
       <div className={styles.searchBox}>
         <SearchBox />

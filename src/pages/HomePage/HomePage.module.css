@@ -1,10 +1,17 @@
-.h1 {
+.container {
+  text-align: center;
   margin-top: 50px;
-  margin-bottom: 20px;
 }
 
-.p {
+.header {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.text {
   max-width: 600px;
   margin: 0 auto;
-  text-align: center;
+  font-size: 16px;
+  color: #666;
 }

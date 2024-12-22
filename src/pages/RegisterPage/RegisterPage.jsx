@@ -18,12 +18,13 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
 
   const handleRegister = async (values, { setSubmitting, setErrors }) => {
+    console.log("Submitting values:", values); // Logowanie wartości do konsoli
     const resultAction = await dispatch(register(values));
     if (register.fulfilled.match(resultAction)) {
       console.log("Registration successful:", resultAction.payload);
     } else {
       console.log("Registration failed:", resultAction.payload);
-      setErrors({ api: resultAction.payload.message });
+      setErrors({ api: resultAction.payload });
     }
     setSubmitting(false);
   };

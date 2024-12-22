@@ -1,10 +1,10 @@
 import React from "react";
-import "./HomePage.module.css";
+import styles from "./HomePage.module.css";
 
 const HomePage = () => (
-  <div>
-    <h1 className={styles.h1}>Welcome to the Contact Management App</h1>
-    <p className={styles.p}>
+  <div className={styles.container}>
+    <h1 className={styles.header}>Welcome to the Contact Management App</h1>
+    <p className={styles.text}>
       Please register or login to manage your contacts.
     </p>
   </div>

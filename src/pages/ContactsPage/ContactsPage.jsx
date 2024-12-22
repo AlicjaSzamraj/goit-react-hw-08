@@ -9,7 +9,7 @@ import styles from "./ContactsPage.module.css";
 const ContactsPage = () => {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contacts.items);
-  const isLoading = useSelector((state) => state.contacts.isLoading);
+  const isLoading = useSelector((state) => state.contacts.loading);
   const error = useSelector((state) => state.contacts.error);
 
   useEffect(() => {

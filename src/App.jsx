@@ -6,6 +6,7 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { RestrictedRoute } from "./components/RestrictedRoute";
 import { refreshUser } from "./redux/auth/operations";
 import { selectIsRefreshing } from "./redux/auth/selectors";
+import Header from "./components/Header";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
@@ -24,6 +25,7 @@ const App = () => {
     <b>Refreshing user...</b>
   ) : (
     <Suspense fallback={<div>Loading...</div>}>
+      <Header /> // Używanie komponentu Header
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />

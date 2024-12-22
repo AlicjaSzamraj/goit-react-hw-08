@@ -2,3 +2,9 @@
   list-style: none;
   padding: 0;
 }
+.noContacts {
+  text-align: center;
+  color: gray;
+  padding: 10px;
+  font-style: italic;
+}

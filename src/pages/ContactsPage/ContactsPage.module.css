@@ -1,0 +1,10 @@
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+div {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
